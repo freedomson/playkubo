@@ -1,141 +1,92 @@
-# Ansible-Boilerplate
+# PLAYKUBO installation process
 
-[Ansible](https://www.ansible.com/) is a configuration management tool, similar to [Chef](https://www.chef.io/) and [Puppet](https://puppet.com/). It allows for performing logical configuration of infrastructure components, such as servers and network switches. The configuration files in this repository can act as a template for your own Ansible projects, in order to get you started quickly. Once you've customized the configuration files then new servers can be configured quickly &mdash; excluding their network configuration. This means that adding new servers is as simple as:
+## Phase 1/2: Install Raspberry Zero with Wifi support and SSH access
 
-- Base OS installation of new server
-- Network configuration of new server (including bond, bridge, DNS and routing)
-- Configuration of password-less (public key) SSH authentication from the Ansible host (your laptop) to the new server
+### Step 1 – Create a fresh SD card using Raspbian image
 
-The remaining configuration (installing packages, configuring services, etc.) can then be achieved using Ansible. In addition, Ansible ensures that configuration of all servers is and remains consistent.
+Create fresh SD card using the latest available Raspbian image from the Official Download page.
 
-## Using this repository
+NOTE: This method must be completed before you boot this card for the first time. This is the point at which the system checks for the wpa_supplicant.conf file. If you have already booted the card you will need to re-write with a fresh image and continue.
 
-Simply download (clone) the repository and start modifying files according to your needs.
+### Step 2 – Bootstrap WiFi setup
 
-```
-git clone https://github.com/acch/ansible-boilerplate.git myAnsibleProject/
-```
+Create a blank text file named “wpa_supplicant.conf”. Use a plain text editor rather than a Word Processor.
 
-Ideally, you'll want to use [Git](https://git-scm.com/) to manage your Ansible configuration files. For that purpose simply [fork](https://help.github.com/articles/fork-a-repo/) this repository into your own Git repository before cloning and customizing it. Git will allow you to version and roll-back changes with ease.
+If using Windows you need to make sure the text file uses Linux/Unix style line breaks. I use Notepad++ (it’s free!) and this is easy to do using “Edit” > “EOL Conversion” > “UNIX/OSX Format”. “UNIX” is then shown in the status bar.
 
-Specifically, you'll want to customize the following files:
-- Add your own hosts and groups to file `hosts`. You'll want to replace `[anygroup]` with a more meaningful group name, and add your own groups as required.
-- Define roles by adding subdirectories underneath directory `roles/`. You'll want to rename `anyrole/` to a more meaningful role name, and add your own roles as required.
-- Associate your hosts (groups) with your roles by adding appropriate playbooks in the root directory. Rename `anygroup.yml` to a more meaningful playbook name.
-- Import all your playbooks in the main `site.yml` playbook.
-
-## Using Ansible
-
-Install `ansible` on your laptop and link the `hosts` file from `/etc/ansible/hosts` to the file in your repository. Now you're all set.
-
-To run a single (ad-hoc) task on multiple servers:
+Insert the following content into the text file :
 
 ```
-# Check connectivity
-ansible all -m ping -u root
+country=us
+update_config=1
+ctrl_interface=/var/run/wpa_supplicant
 
-# Run single command on all servers
-ansible all -m command -a "cat /etc/hosts" -u root
-
-# Run single command only on servers in specific group
-ansible anygroup -m command -a "cat /etc/hosts" -u root
-
-# Run single command on individual server
-ansible server1 -m command -a "cat /etc/hosts" -u root
+network={
+ scan_ssid=1
+ ssid="freedomson"
+ psk="catatua001"
+}
 ```
 
-As the `command` module is the default, it can also be omitted:
+Double check the SSID and password. Both the SSID and password should be surrounded by quotes.
 
+The Country Code should be set the ISO/IEC alpha2 code for the country in which you are using your Pi. Common codes include :
+
+- GB (United Kingdom)
+- FR (France)
+- DE (Germany)
+- US (United States)
+- SE (Sweden)
+
+Copy "wpa_supplicant.conf" file to the boot partition on your SD card. In Windows this is the only partition you will be able to see. It will already contain some of the following files :
+
+bootcode.bin
+loader.bin
+start.elf
+kernel.img
+cmdline.txt
+
+### Step 3 - Enable SSH access
+
+SSH is disabled by default but it is easy to enable by copying a blank text file named "ssh" to the boot partition. This can be done at the same time "wpa_supplicant.conf" is copied across.
+
+## Step 4 – Eject, Insert and Boot
+
+Safely remove the SD card from your PC and insert into the Pi. Power up the Pi and once it has booted you should be connected to your WiFi network.
+
+You may be able to use your Router admin interface to list connected devices. Your Pi should appear in the list with an assigned IP address.
+
+## Step 5 - Test connectivity
 ```
-ansible server1 -a "cat /etc/hosts" -u root
-```
+ssh pi@raspberrypi.local
+# or
+ssh pi@raspberrypi.home
 
-To use shell variables on the remote server, use the `shell` module instead of `command`, and use single quotes for the argument:
-
-```
-ansible server1 -m shell -a 'echo $HOSTNAME' -u root
-```
-
-The true power of ansible comes with so called *playbooks* &mdash; think of them as scripts, but they're declarative. Playbooks allow for running multiple tasks on any number of servers, as defined in the configuration files (`*.yml`):
-
-```
-# Run all tasks on all servers
-ansible-playbook site.yml -v
-
-# Run all tasks only on group of servers
-ansible-playbook anygroup.yml -v
-
-# Run all tasks only on individual server
-ansible-playbook site.yml -v -l server1
-```
-
-Note that `-v` produces verbose output. `-vv` and `-vvv` are also available for even more (debug) output.
-
-To verify what tasks would do without changing the actual configuration, use the `--list-hosts` and `--check` parameters:
-
-```
-# Show hosts that would be affected by playbook
-ansible-playbook site.yml --list-hosts
-
-# Perform dry-run to see what tasks would do
-ansible-playbook site.yml -v --check
-```
-
-Running all tasks in a playbook may take a long time. *Tags* are available to organize tasks so one can only run specific tasks to configure a certain component:
-
-```
-# Show list of available tags
-ansible-playbook site.yml --list-tags
-
-# Only run tasks required to configure DNS
-ansible-playbook site.yml -v -t dns
+# password is "raspberry"
 ```
 
-Note that the above command requires you to have tasks defined with the `tags: dns` attribute.
 
-## Configuration files
+# Fonts:
 
-The `hosts` file defines all hosts and groups which they belong to. Note that a single host can be member of multiple groups. Define groups for each rack, for each network, or for each environment (e.g. production vs. test).
+- https://www.raspberrypi-spy.co.uk/2017/04/manually-setting-up-pi-wifi-using-wpa_supplicant-conf/
 
-### Playbooks
 
-Playbooks associate hosts (groups) with roles. Define a separate playbook for each of your groups, and then import all playbooks in the main `site.yml` playbook.
+## Phase 2/2: Bootstrap PLAYKUBO
 
-File | Description
----- | -----------
-`site.yml` | Main playbook - runs all tasks on all servers
-`anygroup.yml` | Group playbook - runs all tasks on servers in group *anygroup*
+### Requirements
 
-### Roles
+- Raspberry PASSWORDLESS SSH ACCESS 
+Please follow the oficial tutorial to setup this component.
+https://www.raspberrypi.org/documentation/remote-access/ssh/passwordless.md
 
-The group playbooks (e.g. `anygroup.yml`) simply associate hosts with roles. Actual tasks are defined in these roles:
+- You need ansible running on your command line. Please install with the following comands:
+    apt-get install ansible (linux)
+    brew install ansible (mac)
 
+
+### Install PLAYKUBO
 ```
-roles/
-├── common/             Applied to all servers
-│   ├── handlers/
-│   ├── tasks/
-│   │   └ main.yml      Tasks for all servers
-│   └── templates/
-└── anyrole/            Applied to servers in specific group(s)
-    ├── handlers/
-    ├── tasks/
-    │   └ main.yml      Tasks for specific group(s)
-    └── templates/
+git clone git@gitlab.com:freedomson/playkubo.git
+cd playkubo
+ansible-playbook -i hosts site.yml
 ```
-
-Consider adding separate roles for different applications (e.g. webservers, dbservers, hypervisors, etc.), or for different responsibilities which servers fulfill (e.g. infra_server vs. infra_client).
-
-### Tags
-
-Use the following command to show a list of available tags:
-
-```
-ansible-playbook site.yml --list-tags
-```
-
-Consider adding tags for individual components (e.g. DNS, NTP, HTTP, etc.).
-
-Role | Tags
---- | ---
-Common | all,check
