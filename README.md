@@ -56,16 +56,6 @@ Safely remove the SD card from your PC and insert into the Pi. Power up the Pi a
 
 You may be able to use your Router admin interface to list connected devices. Your Pi should appear in the list with an assigned IP address.
 
-## Step 5 - Test connectivity (optional)
-```
-ssh pi@raspberrypi.local
-# or
-ssh pi@raspberrypi.home
-
-# password is "raspberry"
-```
-
-
 # Fonts:
 
 - https://www.raspberrypi-spy.co.uk/2017/04/manually-setting-up-pi-wifi-using-wpa_supplicant-conf/
@@ -79,6 +69,22 @@ ssh pi@raspberrypi.home
 
     * apt-get install ansible git (linux)
     * brew install ansible git (mac)
+
+## Step 1 - Test connectivity
+```
+ssh pi@raspberrypi.local
+# password is "raspberry"
+```
+
+- If you failed to connect please list your active connection on the household router and change file hosts according:
+
+```
+[playkubo]
+PLAYKUBO ansible_host=raspberrypi.home
+#or
+[playkubo]
+PLAYKUBO ansible_host=192.168.1.5
+```
 
 ### Install PLAYKUBO
 ```
