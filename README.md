@@ -76,13 +76,8 @@ ssh pi@raspberrypi.local
 # password is "raspberry"
 ```
 
-- If you failed to connect please list your active connection on the household router and update the Ansible Inventory file *hosts* according.
-You may also try to run *nmap  -sn  192.168.1.0/24* in order to find your PLAYKUBO IP:
-
-```
-[playkubo]
-PLAYKUBO ansible_host=192.168.1.5
-```
+- If you failed to connect please open your Router admin interface and list your connected devices and update the Ansible Inventory file *hosts* according.
+You may also try to run *nmap  -sn  192.168.1.0/24* in order to find your PLAYKUBO ip address.
 
 ### Install PLAYKUBO
 ```
