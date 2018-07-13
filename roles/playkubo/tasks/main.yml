@@ -1,0 +1,24 @@
+---
+#
+# Tasks to be applied to some servers
+#
+- name: Disallow password authentication
+  become: true
+  become_method: sudo
+  lineinfile: dest=/etc/ssh/sshd_config
+              regexp="^#PasswordAuthentication"
+              line="PasswordAuthentication no"
+              state=present
+  notify: Restart ssh
+  when: hostvars['localhost']['ssh_status'] == 1
+
+- name: Disallow root SSH access
+  become: true
+  become_method: sudo
+  lineinfile: dest=/etc/ssh/sshd_config
+              regexp="^#PermitRootLogin"
+              line="PermitRootLogin no"
+              state=present
+  notify: Restart ssh
+  when: hostvars['localhost']['ssh_status'] == 1
+...

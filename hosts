@@ -9,8 +9,8 @@
 #   - You can enter hostnames or ip addresses
 #   - A hostname/ip can be a member of multiple groups
 
-[anygroup]
-SERVER1 ansible_host=raspberrypi.local
+[playkubo]
+PLAYKUBO ansible_host=raspberrypi.local
 
 # Add your own groups here. Hosts can be added to multiple groups like so:
 # [anothergroup]

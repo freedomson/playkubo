@@ -23,8 +23,8 @@ ctrl_interface=/var/run/wpa_supplicant
 
 network={
  scan_ssid=1
- ssid="freedomson"
- psk="catatua001"
+ ssid="ssid_name"
+ psk="secret"
 }
 ```
 
@@ -75,18 +75,25 @@ ssh pi@raspberrypi.home
 
 ### Requirements
 
+- You need Ansible and other tools running on your cli. Please install with the following comands:
+
+    * apt-get install ansible git (linux)
+    * brew install ansible git (mac)
+
+### Setup Raspberry PASSWORDLESS SSH ACCESS 
+
 - Raspberry PASSWORDLESS SSH ACCESS 
 Please follow the oficial tutorial to setup this component.
 https://www.raspberrypi.org/documentation/remote-access/ssh/passwordless.md
-
-- You need ansible running on your command line. Please install with the following comands:
-    apt-get install ansible (linux)
-    brew install ansible (mac)
-
 
 ### Install PLAYKUBO
 ```
 git clone git@gitlab.com:freedomson/playkubo.git
 cd playkubo
 ansible-playbook -i hosts site.yml
+```
+
+### Ping PLAYKUBO
+```
+ansible all -m ping -vvv -i hosts
 ```
