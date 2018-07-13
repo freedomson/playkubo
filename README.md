@@ -56,7 +56,7 @@ Safely remove the SD card from your PC and insert into the Pi. Power up the Pi a
 
 You may be able to use your Router admin interface to list connected devices. Your Pi should appear in the list with an assigned IP address.
 
-## Step 5 - Test connectivity
+## Step 5 - Test connectivity (optional)
 ```
 ssh pi@raspberrypi.local
 # or
@@ -79,12 +79,6 @@ ssh pi@raspberrypi.home
 
     * apt-get install ansible git (linux)
     * brew install ansible git (mac)
-
-### Setup Raspberry PASSWORDLESS SSH ACCESS 
-
-- Raspberry PASSWORDLESS SSH ACCESS 
-Please follow the oficial tutorial to setup this component.
-https://www.raspberrypi.org/documentation/remote-access/ssh/passwordless.md
 
 ### Install PLAYKUBO
 ```
