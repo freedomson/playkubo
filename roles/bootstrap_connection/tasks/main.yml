@@ -8,12 +8,12 @@
     msg: "We will now create a ssl key pair for connecting to you PLAYKUBO"
 
 - name: Generate SSH keys
-  shell: ssh-keygen -b 2048 -t rsa -f ssh_key_pair/id_rsa_playkubo -q -N ""
+  shell: ssh-keygen -y -b 2048 -t rsa -f ssh_key_pair/id_rsa_playkubo -q -N ""
   args:
     creates: ssh_key_pair/id_rsa_playkubo
 
-- name: Move foo to bar
-  command: mv ssh_key_pair/id_rsa_playkubo.pub .ssh/authorized_keys
+- name: Move to .ssh
+  command: cp {{playbook_dir}}/ssh_key_pair/id_rsa_playkubo.pub {{playbook_dir}}/.ssh/authorized_keys
 
 - name: Copy key pair
   shell: "{{role_path}}/handlers/copy_key_pair.sh {{playbook_dir}}/.ssh {{ansible_user}}@{{ hostvars['PLAYKUBO'].ansible_host }} {{ansible_user}}"
