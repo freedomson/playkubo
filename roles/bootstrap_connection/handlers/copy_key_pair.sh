@@ -1,5 +1,10 @@
 #!/usr/bin/expect -f
-spawn bash -c "scp /Users/freedomson/projects/playkubo/ssh_key_pair/id_rsa_playkubo.pub pi@raspberrypi.local:/home/pi/.ssh/authorized_keys"
+log_file -a "/tmp/expect.log"
+set ssh_folder [lindex $argv 0];
+set ssh_host [lindex $argv 1];
+set ssh_user [lindex $argv 2];
+
+spawn bash -c "scp -pr $ssh_folder $ssh_host:/home/$ssh_user/"
 expect {
   -re ".*es.*o.*" {
     exp_send "yes\r"

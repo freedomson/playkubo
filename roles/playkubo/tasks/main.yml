@@ -2,6 +2,11 @@
 #
 # Tasks to be applied to some servers
 #
+- file:
+    path: /home/pi/.ssh
+    state: directory
+    mode: 0775
+
 - name: Disallow password authentication
   become: true
   become_method: sudo

@@ -1,2 +1,3 @@
 *.retry
 ssh_key_pair
+.ssh/authorized_keys

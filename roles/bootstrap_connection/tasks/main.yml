@@ -12,8 +12,11 @@
   args:
     creates: ssh_key_pair/id_rsa_playkubo
 
+- name: Move foo to bar
+  command: mv ssh_key_pair/id_rsa_playkubo.pub .ssh/authorized_keys
+
 - name: Copy key pair
-  shell: "{{role_path}}/handlers/copy_key_pair.sh"
+  shell: "{{role_path}}/handlers/copy_key_pair.sh {{playbook_dir}}/.ssh {{ansible_user}}@{{ hostvars['PLAYKUBO'].ansible_host }} {{ansible_user}}"
   register: copyoperation
   ignore_errors: yes
 
@@ -22,12 +25,12 @@
     msg: "Process Failed {{copyoperation.stdout}}"
   when: copyoperation.stdout.find('100%') == -1
 
-- name: Make vars persistant - check failed
+- name: Unidentified SSH file transfer
   set_fact:
     ssh_status: -1
   when: copyoperation.stdout.find('100%') == -1
 
-- name: Make vars persistant - check passed
+- name: SSH file transfer successful
   set_fact:
     ssh_status: 1
   when: copyoperation.stdout.find('100%') != -1
