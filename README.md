@@ -6,7 +6,7 @@
 
 Create fresh SD card using the latest available Raspbian image from the Official Download page.
 
-- Current version of PLAYKUBO was tested on release 2018-06-27-raspbian-stretch-lite.img
+- Current version of PLAYKUBO was tested on release 2018-06-27-raspbian-stretch-lite.img for more information please visit https://www.raspberrypi.org/downloads/raspbian/
 
 NOTE: This method must be completed before you boot this card for the first time. This is the point at which the system checks for the *wpa_supplicant.conf* file. If you have already booted the card you will need to re-write with a fresh image and continue!
 
