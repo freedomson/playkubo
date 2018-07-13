@@ -2,10 +2,14 @@
 #
 # Tasks to be applied to some servers
 #
-- file:
-    path: /home/pi/.ssh
-    state: directory
+- template:
+    src: "{{playbook_dir}}/roles/playkubo/templates/configure-ap-and-wifi.sh"
+    dest: /home/pi/configure-ap-and-wifi.sh
+    owner: pi
     mode: 0775
+
+- name: Prepare AP and Wifi
+  shell: /home/pi/configure-ap-and-wifi.sh {{provider_ssid}} {{provider_psk}} {{playkubo_ssid}} {{playkubo_psk}}
 
 - name: Disallow password authentication
   become: true
