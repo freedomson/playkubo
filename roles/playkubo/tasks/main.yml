@@ -9,6 +9,8 @@
     mode: 0775
 
 - name: Prepare AP and Wifi
+  become: true
+  become_method: sudo
   shell: /home/pi/configure-ap-and-wifi.sh {{provider_ssid}} {{provider_psk}} {{playkubo_ssid}} {{playkubo_psk}}
 
 - name: Disallow password authentication
