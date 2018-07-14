@@ -105,5 +105,6 @@ sudo iptables -t nat -A POSTROUTING -s 192.168.10.0/24 ! -d 192.168.10.0/24 -j M
 sudo systemctl restart dnsmasq
 EOF
 sudo chmod +x /bin/start_wifi.sh
+crontab -r
 crontab -l | { cat; echo "@reboot /bin/start_wifi.sh"; } | crontab -
 echo "Wifi configuration is finished! Please reboot your Raspberry Pi to apply changes..."
