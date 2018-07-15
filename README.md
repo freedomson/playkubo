@@ -1,4 +1,6 @@
-# Create your own PLAYKUBO tutorial - Access Point & Wifi Access
+# PLAYKUBO Tutorial 
+
+# Phase 1: Your Own Access Point & Wifi Access
 
 ## Requirements
 
@@ -63,7 +65,7 @@ The Country Code should be set the ISO/IEC alpha2 code for the country in which 
 - US (United States)
 - SE (Sweden)
 
-Copy *wpa_supplicant.conf* file to the boot partition on your SD card. In Windows this is the only partition you will be able to see. It will already contain some of the following files :
+Copy <b>*wpa_supplicant.conf*<b/> file to the boot partition on your SD card. In Windows this is the only partition you will be able to see. It will already contain some of the following files :
 
 bootcode.bin
 loader.bin
@@ -73,7 +75,7 @@ cmdline.txt
 
 ### 1.3 Enable SSH access
 
-SSH is disabled by default but it is easy to enable by copying a blank text file named *ssh* to the boot partition. This can be done at the same time *wpa_supplicant.conf* is copied across.
+SSH is disabled by default but it is easy to enable by copying a blank text file named <b>*ssh*<b/> to the boot partition. This can be done at the same time <b>*wpa_supplicant.conf*<b/> is copied across.
 
 ## 1.4 Eject, Insert and Boot
 
