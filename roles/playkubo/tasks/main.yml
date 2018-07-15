@@ -25,7 +25,7 @@
   when: parsed_provider_ssid.stdout_lines[0] == ""
 
 - fail:
-  msg: "The system may not be provisioned according to the parsed_provider_psk status."
+    msg: "The system may not be provisioned according to the parsed_provider_psk status."
   when: parsed_provider_psk.stdout_lines[0] == ""
 
 - template:
@@ -34,15 +34,21 @@
     owner: pi
     mode: 0775
 
-- set_fact: provider_ssid="{{ parsed_provider_ssid.stdout_lines[0] }}"
-- set_fact: provider_psk="{{ parsed_provider_psk.stdout_lines[0] }}"
+- name: Set fact provider_ssid
+  set_fact: provider_ssid="{{ parsed_provider_ssid.stdout_lines[0] }}"
 
-- set_fact: playkubo_ap_ssid="{{parsed_provider_ssid.stdout_lines[0]}}_{{playkubo_ssid}}"
-- set_fact: playkubo_ap_psk="{{ 10000 | random }}"
+- name: Set fact provider_psk
+  set_fact: provider_psk="{{ parsed_provider_psk.stdout_lines[0] }}"
+
+- name: Set fact playkubo_ap_ssid
+  set_fact: playkubo_ap_ssid="{{ (parsed_provider_ssid.stdout_lines[0] + '_' + playkubo_ssid) | truncate(32, True, '') }}"
+
+- name: Set fact playkubo_ap_psk
+  set_fact: playkubo_ap_psk="PLAYKUBO{{ 10000 | random }}"
 
 # USER PRIVATE INTERNET PROVIDER SECRETS
 - debug:
-    msg: "provider_ssid:{{provider_ssid}} provider_psk:{{provider_psk}} playkubo_ap_ssid:{{playkubo_ap_ssid}} playkubo_ap_psk:{{playkubo_ap_psk}}"
+    msg: "provider_ssid:{{provider_ssid}} provider_psk:{{provider_psk}} playkubo_ap_ssid:{{playkubo_ap_ssid}} playkubo_ap_psk: {{playkubo_ap_psk}}"
 
 - name: Prepare AP and Wifi
   become: true

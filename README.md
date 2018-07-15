@@ -25,8 +25,8 @@ ctrl_interface=/var/run/wpa_supplicant
 
 network={
  scan_ssid=1
- ssid="ssid_name"
- psk="secret"
+ ssid="initial_provider_ssid_name"
+ psk="initial_provider_secret"
 }
 ```
 
@@ -87,6 +87,10 @@ git clone git@gitlab.com:freedomson/playkubo.git
 cd playkubo
 ansible-playbook -i hosts site.yml
 ```
+
+You PLAYKUBO access point SSID is: *initial_provider_ssid_name*_PLAYKUBO
+
+Your access secret will be a PLAYKUBOXXXX where XXXX is a random 4 digit pin displayed at the bottom of your *ansible-playbook* run.
 
 ### Ping PLAYKUBO
 ```

@@ -5,6 +5,10 @@ ansible_ssh_private_key_file: ./ssh_key_pair/id_rsa_playkubo
 
 playkubo_ssid: PLAYKUBO
 
+# UNCOMMENT TO CHANGE PROVIDER PARAMETERS AFTER INITIAL SETUP
+#PROVIDER_SSID:
+#PROVIDER_PSK: 
+
 
 
 # Add further variables which apply to all servers to this file...
