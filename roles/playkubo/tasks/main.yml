@@ -34,22 +34,44 @@
     owner: pi
     mode: 0775
 
+# ---
+# SET PROVIDER CREDENTIALS AND SSID 
 - name: Set fact provider_ssid
   set_fact: provider_ssid="{{ parsed_provider_ssid.stdout_lines[0] }}"
+  when: PROVIDER_SSID == ""
 
 - name: Set fact provider_psk
   set_fact: provider_psk="{{ parsed_provider_psk.stdout_lines[0] }}"
+  when: PROVIDER_SSID == ""
+# --
+- name: Set fact provider_ssid
+  set_fact: provider_ssid="{{ PROVIDER_SSID }}"
+  when: PROVIDER_SSID != ""
 
+- name: Set fact provider_psk
+  set_fact: provider_psk="{{ PROVIDER_PSK }}"
+  when: PROVIDER_PSK != ""
+# ---
+
+# ---
+# SET PLAYKUBO AP CREDENTIALS AND SSID 
 - name: Set fact playkubo_ap_ssid
   set_fact: playkubo_ap_ssid="{{ (parsed_provider_ssid.stdout_lines[0] + '_' + playkubo_ssid) | truncate(32, True, '') }}"
 
 - name: Set fact playkubo_ap_psk
   set_fact: playkubo_ap_psk="PLAYKUBO{{ 10000 | random }}"
+# ---
 
 # USER PRIVATE INTERNET PROVIDER SECRETS
 - debug:
-    msg: "provider_ssid:{{provider_ssid}} provider_psk:{{provider_psk}} playkubo_ap_ssid:{{playkubo_ap_ssid}} playkubo_ap_psk: {{playkubo_ap_psk}}"
-
+    msg: 
+      - "INTERNET PROVIDER ACCESS POINT"
+      - "SSID:{{provider_ssid}}"
+      - "PSK:{{provider_psk}}"
+      - ""
+      - "PLAYKUBO ACCESS POINT"
+      - "SSID:{{playkubo_ap_ssid}}"
+      - "PSK:{{playkubo_ap_psk}}"
 - name: Prepare AP and Wifi
   become: true
   become_method: sudo

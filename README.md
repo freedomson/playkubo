@@ -92,6 +92,20 @@ You PLAYKUBO access point SSID is: *initial_provider_ssid_name*_PLAYKUBO
 
 Your access secret will be a PLAYKUBOXXXX where XXXX is a random 4 digit pin displayed at the bottom of your *ansible-playbook* run.
 
+```
+ok: [PLAYKUBO] => {
+    "msg": [
+        "INTERNET PROVIDER ACCESS POINT",
+        "SSID:initial_provider_ssid_name",
+        "PSK:initial_provider_ssid_secret",
+        "",
+        "PLAYKUBO ACCESS POINT",
+        "SSID:<<initial_provider_ssid_name>>_PLAYKUBO", # Truncated at 32 chars maximum SSID string size
+        "PSK:PLAYKUBOXXXX" # XXXX 4 digit random PIN
+    ]
+}
+```
+
 ### Ping PLAYKUBO
 ```
 ansible all -m ping -vvv -i hosts
