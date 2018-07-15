@@ -61,11 +61,6 @@ Safely remove the SD card from your PC and insert into the Pi. Power up the Pi a
 
 You may be able to use your Router admin interface to list connected devices. Your Pi should appear in the list with an assigned IP address.
 
-#### Fonts:
-
-- https://www.raspberrypi-spy.co.uk/2017/04/manually-setting-up-pi-wifi-using-wpa_supplicant-conf/
-
-
 ## 2. Bootstrap PLAYKUBO
 
 ### 2.1 Requirements
@@ -116,3 +111,19 @@ ssh pi@raspberrypi.local
 
 - If you failed to connect please open your Router admin interface and list your connected devices and update the Ansible Inventory file *hosts* according.
 You may also try to run *nmap  -sn  192.168.1.0/24* in order to find your PLAYKUBO ip address.
+
+# CREDITS & Spexial thanks to
+
+- https://albeec13.github.io/2017/09/26/raspberry-pi-zero-w-simultaneous-ap-and-managed-mode-wifi/
+
+- https://gist.githubusercontent.com/lukicdarkoo/6b92d182d37d0a10400060d8344f86e4
+
+- https://www.raspberrypi-spy.co.uk/2017/04/manually-setting-up-pi-wifi-using-wpa_supplicant-conf/
+
+- https://www.labnol.org/software/find-wi-fi-network-password/28949/
+
+- https://blog.thewalr.us/2017/09/26/raspberry-pi-zero-w-simultaneous-ap-and-managed-mode-wifi/
+
+- https://www.regextester.com
+
+- and many more ...
