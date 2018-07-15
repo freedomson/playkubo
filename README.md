@@ -1,8 +1,11 @@
-# PLAYKUBO installation process
+# Create your own PLAYKUBO tutorial
 
-## Phase 1/2: Install Raspberry Zero with Wifi support and SSH access
+- ~10 minute setup
+- After setup you will have both PLAYKUBO AP and Internet access shared to the AP from your internet provider.
 
-### Step 1 – Create a fresh SD card using Raspbian image
+## 1. Install Raspberry Zero with Wifi support and SSH access
+
+### 1.1 Create a fresh SD card using Raspbian image
 
 Create fresh SD card using the latest available Raspbian image from the Official Download page.
 
@@ -10,7 +13,7 @@ Create fresh SD card using the latest available Raspbian image from the Official
 
 NOTE: This method must be completed before you boot this card for the first time. This is the point at which the system checks for the *wpa_supplicant.conf* file. If you have already booted the card you will need to re-write with a fresh image and continue!
 
-### Step 2 – Bootstrap WiFi setup
+### 1.2 Bootstrap WiFi setup
 
 Create a blank text file named *wpa_supplicant.conf*. Use a plain text editor rather than a Word Processor.
 
@@ -48,11 +51,11 @@ start.elf
 kernel.img
 cmdline.txt
 
-### Step 3 - Enable SSH access
+### 1.3 Enable SSH access
 
 SSH is disabled by default but it is easy to enable by copying a blank text file named *ssh* to the boot partition. This can be done at the same time *wpa_supplicant.conf* is copied across.
 
-## Step 4 – Eject, Insert and Boot
+## 1.4 Eject, Insert and Boot
 
 Safely remove the SD card from your PC and insert into the Pi. Power up the Pi and once it has booted you should be connected to your WiFi network.
 
@@ -63,34 +66,25 @@ You may be able to use your Router admin interface to list connected devices. Yo
 - https://www.raspberrypi-spy.co.uk/2017/04/manually-setting-up-pi-wifi-using-wpa_supplicant-conf/
 
 
-## Phase 2/2: Bootstrap PLAYKUBO
+## 2. Bootstrap PLAYKUBO
 
-### Requirements
+### 2.1 Requirements
 
 - You need Ansible and other tools running on your cli. Please install them with the following comands:
 
     * apt-get install ansible git (linux)
     * brew install ansible git (mac)
 
-## Step 1 - Test connectivity
-```
-ssh pi@raspberrypi.local
-# password is "raspberry"
-```
-
-- If you failed to connect please open your Router admin interface and list your connected devices and update the Ansible Inventory file *hosts* according.
-You may also try to run *nmap  -sn  192.168.1.0/24* in order to find your PLAYKUBO ip address.
-
-### Install PLAYKUBO
+### 2.2 Install PLAYKUBO
 ```
 git clone git@gitlab.com:freedomson/playkubo.git
 cd playkubo
 ansible-playbook -i hosts site.yml
 ```
 
-You PLAYKUBO access point SSID is: *initial_provider_ssid_name*_PLAYKUBO
+You PLAYKUBO access point SSID will be, *<b>initial_provider_ssid_name</b>_PLAYKUBO*
 
-Your access secret will be a PLAYKUBOXXXX where XXXX is a random 4 digit pin displayed at the bottom of your *ansible-playbook* run.
+Your access secret will be *<b>PLAYKUBO</b>XXXX* where XXXX is a random 4 digit pin displayed at the bottom of your *ansible-playbook* run.
 
 ```
 ok: [PLAYKUBO] => {
@@ -106,7 +100,19 @@ ok: [PLAYKUBO] => {
 }
 ```
 
-### Ping PLAYKUBO
+### 2.3 Troubleshoot
+
+#### 2.3.1 Ping PLAYKUBO
 ```
 ansible all -m ping -vvv -i hosts
 ```
+
+#### 2.3.2 Test connectivity to raspberrypi
+
+```
+ssh pi@raspberrypi.local
+# password is "raspberry"
+```
+
+- If you failed to connect please open your Router admin interface and list your connected devices and update the Ansible Inventory file *hosts* according.
+You may also try to run *nmap  -sn  192.168.1.0/24* in order to find your PLAYKUBO ip address.
