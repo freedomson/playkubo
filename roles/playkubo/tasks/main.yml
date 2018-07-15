@@ -59,7 +59,7 @@
   set_fact: playkubo_ap_ssid="{{ (parsed_provider_ssid.stdout_lines[0] + '_' + playkubo_ssid) | truncate(32, True, '') }}"
 
 - name: Set fact playkubo_ap_psk
-  set_fact: playkubo_ap_psk="PLAYKUBO{{ 10000 | random }}"
+  set_fact: playkubo_ap_psk="PLAYKUBO{{ 100000 | random }}"
 # ---
 
 # USER PRIVATE INTERNET PROVIDER SECRETS
