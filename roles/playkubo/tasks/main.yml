@@ -2,16 +2,52 @@
 #
 # Tasks to be applied to some servers
 #
+# - name: Install the package "netsh"
+#   become: true
+#   become_method: sudo
+#   apt:
+#     name: netsh
+
+- name: grep provider_ssi
+  become: true
+  become_method: sudo
+  shell: cat /etc/wpa_supplicant/wpa_supplicant.conf | grep -o -P '(?<=ssid=").*(?=")'
+  register: parsed_provider_ssid
+  
+- name: grep provider_psk
+  become: true
+  become_method: sudo
+  shell: cat /etc/wpa_supplicant/wpa_supplicant.conf | grep -o -P '(?<=psk=").*(?=")'
+  register: parsed_provider_psk
+
+- fail:
+    msg: "The system may not be provisioned according to the parsed_provider_ssid status."
+  when: parsed_provider_ssid.stdout_lines[0] == ""
+
+- fail:
+  msg: "The system may not be provisioned according to the parsed_provider_psk status."
+  when: parsed_provider_psk.stdout_lines[0] == ""
+
 - template:
     src: "{{playbook_dir}}/roles/playkubo/templates/configure-ap-and-wifi.sh"
     dest: /home/pi/configure-ap-and-wifi.sh
     owner: pi
     mode: 0775
 
+- set_fact: provider_ssid="{{ parsed_provider_ssid.stdout_lines[0] }}"
+- set_fact: provider_psk="{{ parsed_provider_psk.stdout_lines[0] }}"
+
+- set_fact: playkubo_ap_ssid="{{parsed_provider_ssid.stdout_lines[0]}}_{{playkubo_ssid}}"
+- set_fact: playkubo_ap_psk="{{ 10000 | random }}"
+
+# USER PRIVATE INTERNET PROVIDER SECRETS
+- debug:
+    msg: "provider_ssid:{{provider_ssid}} provider_psk:{{provider_psk}} playkubo_ap_ssid:{{playkubo_ap_ssid}} playkubo_ap_psk:{{playkubo_ap_psk}}"
+
 - name: Prepare AP and Wifi
   become: true
   become_method: sudo
-  shell: /home/pi/configure-ap-and-wifi.sh {{provider_ssid}} {{provider_psk}} {{playkubo_ssid}} {{playkubo_psk}}
+  shell: /home/pi/configure-ap-and-wifi.sh {{provider_ssid}} {{provider_psk}} {{playkubo_ap_ssid}} {{playkubo_ap_psk}}
 
 - name: Disallow password authentication
   become: true
