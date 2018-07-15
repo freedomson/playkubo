@@ -1,7 +1,27 @@
 # Create your own PLAYKUBO tutorial - Access Point & Wifi Access
 
-- ~10 minute setup
-- After setup you will have both PLAYKUBO AP and Internet access shared to the AP from your internet provider.
+## Requirements
+
+- Raspberry Pi Zero W
+- 8gb SDCARD (and adapter for Desktop Computer)
+- MacOSX or Linux Desktop Computer
+
+## Installation Time
+- ~15 minutes
+- This is a headless setup so you will not be needing no monitor or any other devices to connect to your raspberry.
+
+## Services 
+- Headless Internet Service Provider (ISP) WiFi  setup.
+
+- Private WiFi Access Point exposed.
+SSID will be *[internet_provider_ssid]_PLAYKUBO*.
+
+- Internet access shared with Private WiFi Access Point.
+
+Below you can see an example for a internet provider SSID of *<b>freedomson</b>*:
+
+![](https://gitlab.com/freedomson/playkubo/raw/5eb0224ff4bf0e5a43245f26062694e8eb6afc91/Image.png)
+
 
 ## 1. Install Raspberry Zero with Wifi support and SSH access
 
@@ -28,8 +48,8 @@ ctrl_interface=/var/run/wpa_supplicant
 
 network={
  scan_ssid=1
- ssid="initial_provider_ssid_name"
- psk="initial_provider_secret"
+ ssid="internet_provider_ssid_name"
+ psk="internet_provider_secret"
 }
 ```
 
@@ -77,7 +97,7 @@ cd playkubo
 ansible-playbook -i hosts site.yml
 ```
 
-You PLAYKUBO access point SSID will be, *<b>initial_provider_ssid_name</b>_PLAYKUBO*
+You PLAYKUBO access point SSID will be, *<b>internet_provider_ssid_name</b>_PLAYKUBO*
 
 Your access secret will be *<b>PLAYKUBO</b>XXXX* where XXXX is a random 4 digit pin displayed at the bottom of your *ansible-playbook* run.
 
@@ -85,11 +105,11 @@ Your access secret will be *<b>PLAYKUBO</b>XXXX* where XXXX is a random 4 digit 
 ok: [PLAYKUBO] => {
     "msg": [
         "INTERNET PROVIDER ACCESS POINT",
-        "SSID:initial_provider_ssid_name",
-        "PSK:initial_provider_ssid_secret",
+        "SSID:internet_provider_ssid_name",
+        "PSK:internet_provider_ssid_secret",
         "",
         "PLAYKUBO ACCESS POINT",
-        "SSID:<<initial_provider_ssid_name>>_PLAYKUBO", # Truncated at 32 chars maximum SSID string size
+        "SSID:<<internet_provider_ssid_name>>_PLAYKUBO", # Truncated at 32 chars maximum SSID string size
         "PSK:PLAYKUBOXXXX" # XXXX 4 digit random PIN
     ]
 }
