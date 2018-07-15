@@ -16,7 +16,7 @@
 - Headless Internet Service Provider (ISP) WiFi  setup.
 
 - Private WiFi Access Point exposed.
-SSID will be *[internet_provider_ssid]_PLAYKUBO*.
+SSID will be <b>[internet_provider_ssid]_PLAYKUBO]</b>.
 
 - Internet access shared with Private WiFi Access Point.
 
@@ -99,9 +99,9 @@ cd playkubo
 ansible-playbook -i hosts site.yml
 ```
 
-You PLAYKUBO access point SSID will be, *<b>internet_provider_ssid_name</b>_PLAYKUBO*
+You PLAYKUBO access point SSID will be, <b>internet_provider_ssid_name</b>_PLAYKUBO
 
-Your access secret will be *<b>PLAYKUBO</b>XXXX* where XXXX is a random 4 digit pin displayed at the bottom of your *ansible-playbook* run.
+Your access secret will be <b>PLAYKUBO</b>XXXX where XXXX is a random 4 digit pin displayed at the bottom of your <b>ansible-playbook</b> run.
 
 ```
 ok: [PLAYKUBO] => {
@@ -131,8 +131,8 @@ ssh pi@raspberrypi.local
 # password is "raspberry"
 ```
 
-- If you failed to connect please open your Router admin interface and list your connected devices and update the Ansible Inventory file *hosts* according.
-You may also try to run *nmap  -sn  192.168.1.0/24* in order to find your PLAYKUBO ip address.
+- If you failed to connect please open your Router admin interface and list your connected devices and update the Ansible Inventory file <b>hosts</b> according.
+You may also try to run <b>nmap  -sn  192.168.1.0/24</b> in order to find your PLAYKUBO ip address.
 
 ### 3. Credits
 
