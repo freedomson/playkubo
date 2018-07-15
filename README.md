@@ -33,11 +33,11 @@ Create fresh SD card using the latest available Raspbian image from the Official
 
 - Current version of PLAYKUBO was tested on release 2018-06-27-raspbian-stretch-lite.img for more information please visit https://www.raspberrypi.org/downloads/raspbian/
 
-NOTE: This method must be completed before you boot this card for the first time. This is the point at which the system checks for the <b>wpa_supplicant.conf<b/> file. If you have already booted the card you will need to re-write with a fresh image and continue!
+NOTE: This method must be completed before you boot this card for the first time. This is the point at which the system checks for the <b>wpa_supplicant.conf</b> file. If you have already booted the card you will need to re-write with a fresh image and continue!
 
 ### 1.2 Bootstrap WiFi setup
 
-Create a blank text file named <b>wpa_supplicant.conf<b/>. Use a plain text editor rather than a Word Processor.
+Create a blank text file named <b>wpa_supplicant.conf</b>. Use a plain text editor rather than a Word Processor.
 
 If using Windows you need to make sure the text file uses Linux/Unix style line breaks. I use Notepad++ (it’s free!) and this is easy to do using “Edit” > “EOL Conversion” > “UNIX/OSX Format”. “UNIX” is then shown in the status bar.
 
@@ -65,7 +65,7 @@ The Country Code should be set the ISO/IEC alpha2 code for the country in which 
 - US (United States)
 - SE (Sweden)
 
-Copy <b>wpa_supplicant.conf<b/> file to the boot partition on your SD card. In Windows this is the only partition you will be able to see. It will already contain some of the following files :
+Copy <b>wpa_supplicant.conf</b> file to the boot partition on your SD card. In Windows this is the only partition you will be able to see. It will already contain some of the following files :
 
 bootcode.bin
 loader.bin
@@ -75,7 +75,7 @@ cmdline.txt
 
 ### 1.3 Enable SSH access
 
-SSH is disabled by default but it is easy to enable by copying a blank text file named <b>ssh<b/> to the boot partition. This can be done at the same time <b>wpa_supplicant.conf<b/> is copied across.
+SSH is disabled by default but it is easy to enable by copying a blank text file named <b>ssh</b> to the boot partition. This can be done at the same time <b>wpa_supplicant.conf</b> is copied across.
 
 ## 1.4 Eject, Insert and Boot
 
