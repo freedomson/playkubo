@@ -72,11 +72,25 @@
       - "PLAYKUBO ACCESS POINT"
       - "SSID:{{playkubo_ap_ssid}}"
       - "PSK:{{playkubo_ap_psk}}"
+
 - name: Prepare AP and Wifi
   become: true
   become_method: sudo
   shell: /home/pi/configure-ap-and-wifi.sh {{provider_ssid}} {{provider_psk}} {{playkubo_ap_ssid}} {{playkubo_ap_psk}}
 
+# INSTALL DOCKER
+- template:
+    src: "{{playbook_dir}}/roles/playkubo/templates/install-docker.sh"
+    dest: /home/pi/install-docker.sh
+    owner: pi
+    mode: 0775
+
+- name: Install Docker
+  become: true
+  become_method: sudo
+  shell: /home/pi/install-docker.sh
+
+# SECURITY PROTOCOLS
 - name: Disallow password authentication
   become: true
   become_method: sudo
