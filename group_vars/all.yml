@@ -1,4 +1,8 @@
 ---
+# UNCOMMENT TO CHANGE PROVIDER PARAMETERS AFTER INITIAL SETUP
+INSTALL_AP_WIFI:  "true"
+RECOMENDED_DOCKER: "Docker version 18.06.0-ce, build 0ffa825" # Latest tested build
+
 # Default is to log in as root
 ansible_user: pi
 ansible_ssh_private_key_file: ./ssh_key_pair/id_rsa_playkubo

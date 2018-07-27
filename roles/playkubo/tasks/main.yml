@@ -8,87 +8,101 @@
 #   apt:
 #     name: netsh
 
-- name: grep provider_ssi
-  become: true
-  become_method: sudo
-  shell: cat /etc/wpa_supplicant/wpa_supplicant.conf | grep -o -P '(?<=ssid=").*(?=")'
-  register: parsed_provider_ssid
-  
-- name: grep provider_psk
-  become: true
-  become_method: sudo
-  shell: cat /etc/wpa_supplicant/wpa_supplicant.conf | grep -o -P '(?<=psk=").*(?=")'
-  register: parsed_provider_psk
 
-- fail:
-    msg: "The system may not be provisioned according to the parsed_provider_ssid status."
-  when: parsed_provider_ssid.stdout_lines[0] == ""
+- include_tasks: dependencies.yml
 
-- fail:
-    msg: "The system may not be provisioned according to the parsed_provider_psk status."
-  when: parsed_provider_psk.stdout_lines[0] == ""
+# INSTALL APP+WIFI
+- block:
 
-- template:
-    src: "{{playbook_dir}}/roles/playkubo/templates/configure-ap-and-wifi.sh"
-    dest: /home/pi/configure-ap-and-wifi.sh
-    owner: pi
-    mode: 0775
+  - name: grep provider_ssi
+    become: true
+    become_method: sudo
+    shell: cat /etc/wpa_supplicant/wpa_supplicant.conf | grep -o -P '(?<=ssid=").*(?=")'
+    register: parsed_provider_ssid
+    
+  - name: grep provider_psk
+    become: true
+    become_method: sudo
+    shell: cat /etc/wpa_supplicant/wpa_supplicant.conf | grep -o -P '(?<=psk=").*(?=")'
+    register: parsed_provider_psk
 
-# ---
-# SET PROVIDER CREDENTIALS AND SSID 
-- name: Set fact provider_ssid
-  set_fact: provider_ssid="{{ parsed_provider_ssid.stdout_lines[0] }}"
-  when: PROVIDER_SSID == ""
+  - fail:
+      msg: "The system may not be provisioned according to the parsed_provider_ssid status."
+    when: parsed_provider_ssid.stdout_lines[0] == ""
 
-- name: Set fact provider_psk
-  set_fact: provider_psk="{{ parsed_provider_psk.stdout_lines[0] }}"
-  when: PROVIDER_SSID == ""
-# --
-- name: Set fact provider_ssid
-  set_fact: provider_ssid="{{ PROVIDER_SSID }}"
-  when: PROVIDER_SSID != ""
+  - fail:
+      msg: "The system may not be provisioned according to the parsed_provider_psk status."
+    when: parsed_provider_psk.stdout_lines[0] == ""
 
-- name: Set fact provider_psk
-  set_fact: provider_psk="{{ PROVIDER_PSK }}"
-  when: PROVIDER_PSK != ""
-# ---
+  - template:
+      src: "{{playbook_dir}}/roles/playkubo/templates/configure-ap-and-wifi.sh"
+      dest: /home/pi/configure-ap-and-wifi.sh
+      owner: pi
+      mode: 0775
 
-# ---
-# SET PLAYKUBO AP CREDENTIALS AND SSID 
-- name: Set fact playkubo_ap_ssid
-  set_fact: playkubo_ap_ssid="{{ (parsed_provider_ssid.stdout_lines[0] + '_' + playkubo_ssid) | truncate(32, True, '') }}"
+  # ---
+  # SET PROVIDER CREDENTIALS AND SSID 
+  - name: Set fact provider_ssid
+    set_fact: provider_ssid="{{ parsed_provider_ssid.stdout_lines[0] }}"
+    when: PROVIDER_SSID == ""
 
-- name: Set fact playkubo_ap_psk
-  set_fact: playkubo_ap_psk="PLAYKUBO{{ 10000 | random }}"
-# ---
+  - name: Set fact provider_psk
+    set_fact: provider_psk="{{ parsed_provider_psk.stdout_lines[0] }}"
+    when: PROVIDER_SSID == ""
+  # --
+  - name: Set fact provider_ssid
+    set_fact: provider_ssid="{{ PROVIDER_SSID }}"
+    when: PROVIDER_SSID != ""
 
-# USER PRIVATE INTERNET PROVIDER SECRETS
-- debug:
-    msg: 
-      - "INTERNET PROVIDER ACCESS POINT"
-      - "SSID:{{provider_ssid}}"
-      - "PSK:{{provider_psk}}"
-      - ""
-      - "PLAYKUBO ACCESS POINT"
-      - "SSID:{{playkubo_ap_ssid}}"
-      - "PSK:{{playkubo_ap_psk}}"
+  - name: Set fact provider_psk
+    set_fact: provider_psk="{{ PROVIDER_PSK }}"
+    when: PROVIDER_PSK != ""
+  # ---
 
-- name: Prepare AP and Wifi
-  become: true
-  become_method: sudo
-  shell: /home/pi/configure-ap-and-wifi.sh {{provider_ssid}} {{provider_psk}} {{playkubo_ap_ssid}} {{playkubo_ap_psk}}
+  # ---
+  # SET PLAYKUBO AP CREDENTIALS AND SSID 
+  - name: Set fact playkubo_ap_ssid
+    set_fact: playkubo_ap_ssid="{{ (parsed_provider_ssid.stdout_lines[0] + '_' + playkubo_ssid) | truncate(32, True, '') }}"
+
+  - name: Set fact playkubo_ap_psk
+    set_fact: playkubo_ap_psk="PLAYKUBO{{ 10000 | random }}"
+  # ---
+
+  # USER PRIVATE INTERNET PROVIDER SECRETS
+  - debug:
+      msg: 
+        - "INTERNET PROVIDER ACCESS POINT"
+        - "SSID:{{provider_ssid}}"
+        - "PSK:{{provider_psk}}"
+        - ""
+        - "PLAYKUBO ACCESS POINT"
+        - "SSID:{{playkubo_ap_ssid}}"
+        - "PSK:{{playkubo_ap_psk}}"
+
+  - name: Prepare AP and Wifi
+    become: true
+    become_method: sudo
+    shell: /home/pi/configure-ap-and-wifi.sh {{provider_ssid}} {{provider_psk}} {{playkubo_ap_ssid}} {{playkubo_ap_psk}}
+  when: INSTALL_AP_WIFI == "true" 
+
 
 # INSTALL DOCKER
-- template:
-    src: "{{playbook_dir}}/roles/playkubo/templates/install-docker.sh"
-    dest: /home/pi/install-docker.sh
-    owner: pi
-    mode: 0775
+- block:
+  - template:
+      src: "{{playbook_dir}}/roles/playkubo/templates/install-docker.sh"
+      dest: /home/pi/install-docker.sh
+      owner: pi
+      mode: 0775
 
-- name: Install Docker
-  become: true
-  become_method: sudo
-  shell: /home/pi/install-docker.sh
+  - name: Install Docker
+    become: true
+    become_method: sudo
+    shell: /home/pi/install-docker.sh
+
+  when: hostvars['PLAYKUBO'].localdockerversion.stdout != "1"
+
+#- name: Refresh inventory to ensure new instaces exist in inventory
+#  meta: end_play
 
 # SECURITY PROTOCOLS
 - name: Disallow password authentication

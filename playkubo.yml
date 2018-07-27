@@ -1,9 +1,9 @@
 ---
 - hosts: playkubo
+  gather_facts: no
   roles:
     - common
     - playkubo
 
-# Associate further roles to servers in specific group in this file...
-
+#
 ...

@@ -1,0 +1,17 @@
+# INSTALL DOCKER
+# Check docker
+- shell: docker -v
+  register: bindocker
+
+- debug:
+    msg: "{{bindocker}}"
+
+- shell: echo "1"
+  register: localdockerversion 
+  when: bindocker.stdout | regex_search('(?i)docker') | first
+  ignore_errors: True
+
+- name: docker is present?
+  fail: msg="Detected {{bindocker.stdout}}"
+  when: localdockerversion.stdout=="1"
+  ignore_errors: True
