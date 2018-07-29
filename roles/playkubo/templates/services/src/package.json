@@ -1,7 +1,7 @@
 {
-    "name": "HelloNode",
+    "name": "Playkubo",
     "version": "0.0.1",
-    "description": "HelloNode for Docker container",
+    "description": "Playkubo Catptivity Portal",
     "main": "server.js",
     "author": {
       "name": "",
