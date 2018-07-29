@@ -2,6 +2,7 @@
 # Check docker
 - shell: docker -v
   register: bindocker
+  ignore_errors: true
 
 - debug:
     msg: "{{bindocker}}"
@@ -9,9 +10,28 @@
 - shell: echo "1"
   register: localdockerversion 
   when: bindocker.stdout | regex_search('(?i)docker') | first
-  ignore_errors: True
+  ignore_errors: true
 
 - name: docker is present?
   fail: msg="Detected {{bindocker.stdout}}"
   when: localdockerversion.stdout=="1"
-  ignore_errors: True
+  ignore_errors: true
+
+
+# INSTALL DOCKER
+- block:
+  #- template:
+  #    src: "{{playbook_dir}}/roles/playkubo/templates/install-docker.sh"
+  #    dest: /home/pi/install-docker.sh
+  #    owner: pi
+  #    mode: 0775
+
+  - name: Install Docker
+    register: outdocker
+    shell: curl -sSL https://get.docker.com | sh
+    #/home/pi/install-docker.sh
+    ignore_errors: true
+
+  - debug: var=outdocker.stdout_lines
+
+  when: hostvars['PLAYKUBO'].bindocker.stdout==""

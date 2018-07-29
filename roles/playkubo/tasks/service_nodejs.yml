@@ -1,0 +1,55 @@
+# SERVICE NODEJS
+- block:
+
+  - name: Creates directory
+    file: path=/home/pi/src state=directory
+
+  - template:
+      src: "{{playbook_dir}}/roles/playkubo/templates/services/src/server.js"
+      dest: /home/pi/src/server.js
+      owner: pi
+      mode: 0775
+
+  - template:
+      src: "{{playbook_dir}}/roles/playkubo/templates/services/src/package.json"
+      dest: /home/pi/src/package.json
+      owner: pi
+      mode: 0775
+
+  - template:
+      src: "{{playbook_dir}}/roles/playkubo/templates/services/nodejs.dockerfile"
+      dest: /home/pi/nodejs.dockerfile
+      owner: pi
+      mode: 0775
+
+  - name: Installing Container NODEJS
+    become: true
+    become_method: sudo
+    shell: docker build -t playkubo -f nodejs.dockerfile .
+    register: dockerinstall
+
+  - debug: msg="{{ dockerinstall.stdout }}"
+
+  - name: Stopping all docker containers
+    become: true
+    become_method: sudo
+    shell: docker stop $(docker ps -a -q)
+    register: dockerstop
+
+  - debug: msg="{{ dockerstop.stdout }}"
+
+  - name: Removing all docker containers
+    become: true
+    become_method: sudo
+    shell: docker rm $(docker ps -a -q)
+    register: dockerremove
+
+  - debug: msg="{{ dockerremove.stdout }}"
+
+  - name: Starting Container NODEJS
+    become: true
+    become_method: sudo
+    shell: docker run -d -p 8080:8080 -ti playkubo
+    register: dockerrun
+
+  - debug: msg="{{ dockerrun.stdout }}"
