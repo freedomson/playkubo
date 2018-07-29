@@ -1,0 +1,13 @@
+{
+    "name": "HelloNode",
+    "version": "0.0.1",
+    "description": "HelloNode for Docker container",
+    "main": "server.js",
+    "author": {
+      "name": "",
+      "email": ""
+    },
+    "dependencies":  {
+      "util": "0.10.3"
+    }
+  }
