@@ -1,3 +1,4 @@
 *.retry
 ssh_key_pair
 .ssh/authorized_keys
+roles/playkubo/templates/services/src/node_modules

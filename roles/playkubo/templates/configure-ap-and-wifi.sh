@@ -103,18 +103,11 @@ sudo ifdown --force ap0
 sudo ifup ap0
 sudo ifup wlan0
 sudo sysctl -w net.ipv4.ip_forward=1
-sudo iptables -t nat -A POSTROUTING -s 192.168.10.0/24 ! -d 192.168.10.0/24 -j MASQUERADE
 sudo systemctl restart dnsmasq
-
-# Captivity portal
-#APIP=$(ip -4 addr show ap0 | grep -oP "(?<=inet ).*(?=/)")
-sudo iptables -t mangle -N internet
-sudo iptables -t mangle -A PREROUTING -i ap0 -p tcp -m tcp --dport 80 -j internet
-sudo iptables -t mangle -A internet -j MARK --set-mark 99
-sudo iptables -t nat -A PREROUTING -i ap0 -p tcp -m tcp --match multiport --dports 80,443 -j DNAT --to-destination 192.168.10.1:8080
-
 EOF
+
 sudo chmod +x /bin/start_wifi.sh
+
 crontab -r
 crontab -l | { cat; echo "@reboot /bin/start_wifi.sh"; } | crontab -
 echo "Wifi configuration is finished! Please reboot your Raspberry Pi to apply changes..."

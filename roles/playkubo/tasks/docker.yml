@@ -35,3 +35,19 @@
   - debug: var=outdocker.stdout_lines
 
   when: hostvars['PLAYKUBO'].bindocker.stdout==""
+
+  # RESTART DOCKER
+- block:
+  - name: Stop Docker
+    register: stopoutdocker
+    shell: /etc/init.d/docker stop
+
+  - debug: var=stopoutdocker.stdout_lines
+
+  - name: Start Docker
+    register: startoutdocker
+    shell: /etc/init.d/docker start
+
+  - debug: var=startoutdocker.stdout_lines
+
+  when: hostvars['PLAYKUBO'].bindocker.stdout=="1"

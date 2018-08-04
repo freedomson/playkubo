@@ -1,13 +1,15 @@
 {
-    "name": "Playkubo",
-    "version": "0.0.1",
-    "description": "Playkubo Catptivity Portal",
-    "main": "server.js",
-    "author": {
-      "name": "",
-      "email": ""
-    },
-    "dependencies":  {
-      "util": "0.10.3"
-    }
+  "name": "Playkubo",
+  "version": "0.0.1",
+  "description": "Playkubo Catptivity Portal",
+  "main": "server.js",
+  "author": {
+    "name": "",
+    "email": ""
+  },
+  "dependencies": {
+    "express": "^4.16.3",
+    "pug": "^2.0.3",
+    "util": "0.10.3"
   }
+}

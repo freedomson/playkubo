@@ -1,0 +1,21 @@
+- template:
+    src: "{{playbook_dir}}/roles/playkubo/templates/captivity-portal.sh"
+    dest: /home/pi/captivity-portal.sh
+    owner: pi
+    mode: 0775
+
+- name: Prepare AP and Wifi [purge]
+  register: outpurge
+  become: true
+  become_method: sudo
+  shell: /home/pi/captivity-portal.sh purge 
+
+- debug: var=outpurge.stdout_lines
+
+- name: Prepare AP and Wifi [initialize]
+  register: outinitialize
+  become: true
+  become_method: sudo
+  shell: /home/pi/captivity-portal.sh initialize
+
+- debug: var=outinitialize.stdout_lines

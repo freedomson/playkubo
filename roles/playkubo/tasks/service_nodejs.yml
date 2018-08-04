@@ -1,20 +1,21 @@
 # SERVICE NODEJS
 - block:
+  - name: Ensure directory structure exists
+    file:
+      path: '/home/pi/src/{{ item.path }}'
+      state: directory
+    with_filetree: '{{playbook_dir}}/roles/playkubo/templates/services/src'
+    when: item.state == 'directory'
 
-  - name: Creates directory
-    file: path=/home/pi/src state=directory
+  - name: Ensure files are populated from templates
+    template:
+      src: '{{ item.src }}'
+      dest: '/home/pi/src/{{ item.path }}'
+    with_filetree: '{{playbook_dir}}/roles/playkubo/templates/services/src'
+    when: item.state == 'file'
 
-  - template:
-      src: "{{playbook_dir}}/roles/playkubo/templates/services/src/server.js"
-      dest: /home/pi/src/server.js
-      owner: pi
-      mode: 0775
+- block:
 
-  - template:
-      src: "{{playbook_dir}}/roles/playkubo/templates/services/src/package.json"
-      dest: /home/pi/src/package.json
-      owner: pi
-      mode: 0775
 
   - template:
       src: "{{playbook_dir}}/roles/playkubo/templates/services/nodejs.dockerfile"
