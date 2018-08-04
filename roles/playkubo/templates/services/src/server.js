@@ -1,14 +1,33 @@
-const express = require("express");
-const pu = require("pug");
-const app = express()
+/*
+ * Module dependencies
+ */
+var express = require('express')
+  , stylus = require('stylus')
+  , nib = require('nib')
 
-app.use(express.static(__dirname + '/public'));
-app.set('view engine', 'pug');
 
-app.get('/', (req, res) => {
-    res.render('index')
+var app = express()
+
+function compile(str, path) {
+  return stylus(str)
+    .set('filename', path)
+    .use(nib());
+}
+
+app.set('views', __dirname + '/views')
+app.set('view engine', 'jade')
+//app.use(express.logger('dev'))
+app.use(stylus.middleware(
+  { src: __dirname + '/public'
+  , compile: compile
+  }
+))
+app.use(express.static(__dirname + '/public'))
+
+app.get('/', function (req, res) {
+  res.render('index',
+  { title : 'Home' }
+  )
 })
 
-app.listen(8080, () => {
-    console.log('http://localhost:8080')
-})
+app.listen(8080)

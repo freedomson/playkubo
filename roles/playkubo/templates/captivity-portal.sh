@@ -34,7 +34,7 @@ sudo iptables -t nat -A PREROUTING -i ap0 -p tcp -j DNAT --to-destination 192.16
 
 
 
-        echo "Initialized deact"
+        echo "Initialized"
         exit 0
         ;;
     'add')
@@ -64,15 +64,15 @@ sudo iptables -t nat -A PREROUTING -i ap0 -p tcp -j DNAT --to-destination 192.16
         ;;
     'purge')
         # Purge all of the IP tables rules.
-        # $IPTABLES -F
-        # $IPTABLES -X
-        # $IPTABLES -t nat -F
-        # $IPTABLES -t nat -X
-        # $IPTABLES -t mangle -F
-        # $IPTABLES -t mangle -X
-        # $IPTABLES -t filter -F
-        # $IPTABLES -t filter -X
-        echo "purge deact"
+        $IPTABLES -F
+        $IPTABLES -X
+        $IPTABLES -t nat -F
+        $IPTABLES -t nat -X
+        $IPTABLES -t mangle -F
+        $IPTABLES -t mangle -X
+        $IPTABLES -t filter -F
+        $IPTABLES -t filter -X
+        echo "purge"
         exit 0
         ;;
     'list')
