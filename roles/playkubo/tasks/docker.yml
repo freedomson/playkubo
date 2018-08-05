@@ -7,14 +7,19 @@
 - debug:
     msg: "{{bindocker}}"
 
-- shell: echo "1"
-  register: localdockerversion 
-  when: bindocker.stdout | regex_search('(?i)docker') | first
-  ignore_errors: true
+# - shell: echo "1"
+#   register: localdockerversion 
+#   when: bindocker.stdout | regex_search('(?i)docker') | first
+#   ignore_errors: true
+
+# - shell: echo "0"
+#   register: localdockerversion 
+#   when: bindocker.stdout==""
+#   ignore_errors: true
 
 - name: docker is present?
   fail: msg="Detected {{bindocker.stdout}}"
-  when: localdockerversion.stdout=="1"
+  when: bindocker.stdout!=""
   ignore_errors: true
 
 
@@ -30,24 +35,46 @@
     register: outdocker
     shell: curl -sSL https://get.docker.com | sh
     #/home/pi/install-docker.sh
-    ignore_errors: true
+    #ignore_errors: true
 
   - debug: var=outdocker.stdout_lines
 
-  when: hostvars['PLAYKUBO'].bindocker.stdout==""
+  when: bindocker.stdout==""
 
   # RESTART DOCKER
 - block:
+
   - name: Stop Docker
+    become: true
+    become_method: sudo
     register: stopoutdocker
     shell: /etc/init.d/docker stop
 
   - debug: var=stopoutdocker.stdout_lines
 
   - name: Start Docker
+    become: true
+    become_method: sudo
     register: startoutdocker
     shell: /etc/init.d/docker start
 
   - debug: var=startoutdocker.stdout_lines
 
-  when: hostvars['PLAYKUBO'].bindocker.stdout=="1"
+  - name: Stopping all docker containers
+    become: true
+    become_method: sudo
+    shell: docker stop $(docker ps -a -q)
+    register: dockerstop
+  
+  - debug: msg="{{ dockerstop.stdout }}"
+
+  - name: Removing all docker containers
+
+    become: true
+    become_method: sudo
+    shell: docker rm $(docker ps -a -q)
+    register: dockerremove
+
+  - debug: msg="{{ dockerremove.stdout }}"
+
+  #when: hostvars['PLAYKUBO'].bindocker.stdout!=""

@@ -11,7 +11,7 @@ RUN apt-get install -y npm
 ADD src/ /src
 WORKDIR /src
 
-RUN npm install
+#RUN npm install
 
 EXPOSE 8080
  

@@ -78,12 +78,22 @@
         - "SSID:{{playkubo_ap_ssid}}"
         - "PSK:{{playkubo_ap_psk}}"
 
-  - name: Prepare AP and Wifi
+  - name: Prepare AP and Wifi [files]
+    register: prepare_wifi_out
     become: true
     become_method: sudo
     shell: /home/pi/configure-ap-and-wifi.sh {{provider_ssid}} {{provider_psk}} {{playkubo_ap_ssid}} {{playkubo_ap_psk}}
-  when: INSTALL_AP_WIFI == "true" 
+    when: INSTALL_AP_WIFI == "true"
 
+  - debug: var=prepare_wifi_out.stdout_lines
+    when: INSTALL_AP_WIFI == "true"
+
+  - name: Prepare AP and Wifi [run]
+    register: start_wifi_out
+    become: true
+    become_method: sudo
+    shell: /bin/start_wifi.sh
+  - debug: var=start_wifi_out.stdout_lines
 
 #- name: Refresh inventory to ensure new instaces exist in inventory
 #  meta: end_play

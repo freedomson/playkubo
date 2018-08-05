@@ -1,7 +1,7 @@
 {
   "name": "Playkubo",
   "version": "0.0.1",
-  "description": "Playkubo Catptivity Portal",
+  "description": "Playkubo Captivity Portal",
   "main": "server.js",
   "author": {
     "name": "Playkubo",

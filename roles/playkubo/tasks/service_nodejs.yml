@@ -31,22 +31,6 @@
 
   - debug: msg="{{ dockerinstall.stdout }}"
 
-  - name: Stopping all docker containers
-    become: true
-    become_method: sudo
-    shell: docker stop $(docker ps -a -q)
-    register: dockerstop
-
-  - debug: msg="{{ dockerstop.stdout }}"
-
-  - name: Removing all docker containers
-    become: true
-    become_method: sudo
-    shell: docker rm $(docker ps -a -q)
-    register: dockerremove
-
-  - debug: msg="{{ dockerremove.stdout }}"
-
   - name: Starting Container NODEJS
     become: true
     become_method: sudo
