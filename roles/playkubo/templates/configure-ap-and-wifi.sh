@@ -110,4 +110,6 @@ EOF
 
 crontab -r
 crontab -l | { cat; echo "@reboot /bin/start_wifi.sh"; } | crontab -
+crontab -l | { cat; echo "@reboot /etc/init.d/docker start"; } | crontab -
 echo "Crontab @reboot /bin/start_wifi.sh was set!"
+echo "Crontab @reboot /etc/init.d/docker start was set!"

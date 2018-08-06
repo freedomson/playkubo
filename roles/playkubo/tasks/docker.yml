@@ -65,16 +65,28 @@
     become_method: sudo
     shell: docker stop $(docker ps -a -q)
     register: dockerstop
+    ignore_errors: true 
   
   - debug: msg="{{ dockerstop.stdout }}"
+    ignore_errors: true
 
   - name: Removing all docker containers
-
     become: true
     become_method: sudo
     shell: docker rm $(docker ps -a -q)
     register: dockerremove
+    ignore_errors: true
 
   - debug: msg="{{ dockerremove.stdout }}"
+    ignore_errors: true
 
+  # - name: Enable docker at boot
+  #   become: true
+  #   become_method: sudo
+  #   shell: sudo systemctl enable docker
+  #   register: dockerenable
+  #   ignore_errors: true
+
+  # - debug: msg="{{ dockerenable.stdout }}"
+  #   ignore_errors: true
   #when: hostvars['PLAYKUBO'].bindocker.stdout!=""

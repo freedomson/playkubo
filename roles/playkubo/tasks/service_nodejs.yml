@@ -23,7 +23,7 @@
       owner: pi
       mode: 0775
 
-  - name: Installing Container NODEJS
+  - name: Installing captivity portal [nodejs]
     become: true
     become_method: sudo
     shell: docker build -t playkubo -f nodejs.dockerfile .
@@ -31,7 +31,7 @@
 
   - debug: msg="{{ dockerinstall.stdout }}"
 
-  - name: Starting Container NODEJS
+  - name:  Starting captivity portal [http://192.168.10.1:8080/]
     become: true
     become_method: sudo
     shell: docker run -d -p 8080:8080 -ti playkubo
