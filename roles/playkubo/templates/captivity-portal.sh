@@ -47,7 +47,7 @@ sudo iptables -t nat -A PREROUTING -i ap0 -p tcp -j DNAT --to-destination 192.16
         # Add the MAC address of the client to the whitelist, so it'll be able
         # to access the mesh even if its IP address changes.
         $IPTABLES -t nat -I PREROUTING -m mac --mac-source $CLIENTMAC -j ACCEPT
-        echo "add $2"
+        echo "Added $2"
         exit 0
         ;;
     'remove')
@@ -59,7 +59,7 @@ sudo iptables -t nat -A PREROUTING -i ap0 -p tcp -j DNAT --to-destination 192.16
 
         # Delete the MAC address of the client from the whitelist.
         $IPTABLES -t nat -D PREROUTING -m mac --mac-source $CLIENTMAC -j ACCEPT
-        echo "remove $2"
+        echo "Removed $2"
         exit 0
         ;;
     'purge')
@@ -72,7 +72,7 @@ sudo iptables -t nat -A PREROUTING -i ap0 -p tcp -j DNAT --to-destination 192.16
         $IPTABLES -t mangle -X
         $IPTABLES -t filter -F
         $IPTABLES -t filter -X
-        echo "purge"
+        echo "Purged"
         exit 0
         ;;
     'list')

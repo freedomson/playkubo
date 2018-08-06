@@ -14,9 +14,12 @@
     with_filetree: '{{playbook_dir}}/roles/playkubo/templates/services/src'
     when: item.state == 'file' and (item.path | search(".jpeg")) == false
 
+  - name: Copy public files from a directory to remote server
+    copy:
+      src: '{{playbook_dir}}/roles/playkubo/templates/services/src/public/'
+      dest: '/home/pi/src/public'
+  
 - block:
-
-
   - template:
       src: "{{playbook_dir}}/roles/playkubo/templates/services/nodejs.dockerfile"
       dest: /home/pi/nodejs.dockerfile
