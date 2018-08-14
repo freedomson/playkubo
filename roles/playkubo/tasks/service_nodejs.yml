@@ -21,7 +21,7 @@
 
 
 - block:
-  - name:  Booting captivity portal [http://192.168.10.1:8080/]
+  - name:  Rebooting captivity portal [http://192.168.10.1:8080/]
     become: true
     become_method: sudo
     shell: cd /home/pi/src/ ; npm install
@@ -37,26 +37,3 @@
     register: dockerrun
 
   - debug: msg="{{ dockerrun.stdout }}"
-  
-# - block:
-#   - template:
-#       src: "{{playbook_dir}}/roles/playkubo/templates/services/nodejs.dockerfile"
-#       dest: /home/pi/nodejs.dockerfile
-#       owner: pi
-#       mode: 0775
-
-  # - name: Installing captivity portal [nodejs]
-  #   become: true
-  #   become_method: sudo
-  #   shell: docker build -t playkubo -f nodejs.dockerfile .
-  #   register: dockerinstall
-
-  # - debug: msg="{{ dockerinstall.stdout }}"
-
-  # - name:  Starting captivity portal [http://192.168.10.1:8080/]
-  #   become: true
-  #   become_method: sudo
-  #   shell: docker run -d -p 8080:8080 -ti playkubo
-  #   register: dockerrun
-
-  # - debug: msg="{{ dockerrun.stdout }}"

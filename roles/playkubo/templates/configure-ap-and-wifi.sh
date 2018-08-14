@@ -14,7 +14,8 @@ AP_PASSPHRASE="${4}"
 # Install dependencies
 sudo apt -y update
 sudo apt -y upgrade
-sudo apt -y install dnsmasq dhcpcd hostapd nodejs npm
+sudo apt -y install dnsmasq dhcpcd hostapd nodejs npm 
+# TODO install supervisor for nodejs ???
 
 # Populate `/etc/udev/rules.d/70-persistent-net.rules`
 sudo bash -c 'cat > /etc/udev/rules.d/70-persistent-net.rules' << EOF
@@ -97,11 +98,8 @@ EOF
 # Populate `/bin/start_wifi.sh`
 # TODO: Supervisor
 sudo bash -c 'cat > /bin/start_wifi.sh' << EOF
-echo 'Starting Captivity Portal...'
-node /home/pi/src/server.js &
-
 echo 'Starting Wifi AP and client...'
-sleep 30
+sleep 5
 sudo ifdown --force wlan0
 sudo ifdown --force ap0
 sudo ifup ap0
@@ -110,20 +108,13 @@ sudo sysctl -w net.ipv4.ip_forward=1
 sudo systemctl restart dnsmasq
 sudo /home/pi/captivity-portal.sh purge
 sudo /home/pi/captivity-portal.sh initialize
+
+echo 'Starting Captivity Portal...'
+node /home/pi/src/server.js &
+
 EOF
 chmod +x /bin/start_wifi.sh
 
-# Populate `/bin/start_docker.sh`
-# sudo bash -c 'cat > /bin/start_docker.sh' << EOF
-# echo 'Starting docker...'
-# sleep 30
-# sudo systemctl stop docker.service
-# sudo systemctl start docker.service
-# sudo docker run -d -p 8080:8080 -ti playkubo
-# EOF
-# chmod +x /bin/start_docker.sh
-
 crontab -r
 crontab -l | { cat; echo "@reboot /bin/start_wifi.sh"; } | crontab -
-#crontab -l | { cat; echo "@reboot /bin/start_docker.sh"; } | crontab -
 echo "Crontab @reboot was set!"
