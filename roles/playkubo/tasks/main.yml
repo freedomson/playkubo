@@ -1,4 +1,4 @@
 - include_tasks: captivity.yml
 - include_tasks: install.yml
-- include_tasks: docker.yml
+#- include_tasks: docker.yml
 - include_tasks: service_nodejs.yml
