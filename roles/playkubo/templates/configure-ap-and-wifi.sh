@@ -107,9 +107,19 @@ sudo systemctl restart dnsmasq
 sudo /home/pi/captivity-portal.sh purge
 sudo /home/pi/captivity-portal.sh initialize
 EOF
+chmod +x /bin/start_wifi.sh
+
+# Populate `/bin/start_docker.sh`
+sudo bash -c 'cat > /bin/start_docker.sh' << EOF
+echo 'Starting docker...'
+sleep 30
+sudo systemctl stop docker.service
+sudo systemctl start docker.service
+sudo docker run -d -p 8080:8080 -ti playkubo
+EOF
+chmod +x /bin/start_docker.sh
 
 crontab -r
 crontab -l | { cat; echo "@reboot /bin/start_wifi.sh"; } | crontab -
-crontab -l | { cat; echo "@reboot /etc/init.d/docker start"; } | crontab -
-echo "Crontab @reboot /bin/start_wifi.sh was set!"
-echo "Crontab @reboot /etc/init.d/docker start was set!"
+crontab -l | { cat; echo "@reboot /bin/start_docker.sh"; } | crontab -
+echo "Crontab @reboot was set!"

@@ -44,6 +44,16 @@
   # RESTART DOCKER
 - block:
 
+  - name: Set pi user group docker
+    become: true
+    become_method: sudo
+    shell: usermod -aG docker pi
+    register: dockeruser
+    ignore_errors: true 
+
+  - debug: msg="{{ dockeruser.stdout }}"
+    ignore_errors: true
+
   - name: Stop Docker
     become: true
     become_method: sudo
