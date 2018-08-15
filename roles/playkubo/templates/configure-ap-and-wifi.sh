@@ -14,7 +14,7 @@ AP_PASSPHRASE="${4}"
 # Install dependencies
 sudo apt -y update
 sudo apt -y upgrade
-sudo apt -y install dnsmasq dhcpcd hostapd nodejs npm 
+sudo apt -y install dnsmasq dhcpcd hostapd nodejs npm git
 # TODO install supervisor for nodejs ???
 
 # Populate `/etc/udev/rules.d/70-persistent-net.rules`
@@ -110,7 +110,7 @@ sudo /home/pi/captivity-portal.sh purge
 sudo /home/pi/captivity-portal.sh initialize
 
 echo 'Starting Captivity Portal...'
-cd /home/pi/src ; npm start &
+cd /home/pi/src ; supervisor server.js &
 
 EOF
 chmod +x /bin/start_wifi.sh

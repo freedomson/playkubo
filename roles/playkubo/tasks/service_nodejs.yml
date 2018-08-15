@@ -1,27 +1,36 @@
 # SERVICE NODEJS
 - block:
-  - name: Ensure directory structure exists
-    file:
-      path: '/home/pi/src/{{ item.path }}'
-      state: directory
-    with_filetree: '{{playbook_dir}}/roles/playkubo/templates/services/src'
-    when: item.state == 'directory' and (item.path | search("node_modules")) == false
+  - name:  Install supervisor
+    become: true
+    become_method: sudo
+    shell: npm install --global supervisor
+    register: supervisor
 
-  - name: Ensure files are populated from templates
-    template:
-      src: '{{ item.src }}'
-      dest: '/home/pi/src/{{ item.path }}'
-    with_filetree: '{{playbook_dir}}/roles/playkubo/templates/services/src'
-    when: item.state == 'file' and (item.path | search(".jpeg")) == false
+  - debug: msg="{{ supervisor.stdout }}"
 
-  - name: Copy public files from a directory to remote server
-    copy:
-      src: '{{playbook_dir}}/roles/playkubo/templates/services/src/public/'
-      dest: '/home/pi/src/public'
+  - name:  Move current appserver
+    become: true
+    become_method: sudo
+    shell: mv /home/pi/playkubo /home/pi/playkubo.old
+    register: move
 
+  - debug: msg="{{ move.stdout }}"
 
-- block:
+  - name:  Clone repo master
+    shell: git clone https://github.com/freedomson/playkubo.git
+    register: clonerepo
+
+  - debug: msg="{{ clonerepo.stdout }}"
+
+  - name:  Symbolic source app server
+    shell: ln -s /home/pi/playkubo/playkubo-portal-src /home/pi/src
+    register: sourcelink
+
+  - debug: msg="{{ sourcelink.stdout }}"
+
   - name:  Rebooting captivity portal [http://192.168.10.1:8080/]
+    become: true
+    become_method: sudo
     shell: cd /home/pi/src/ ; npm install
     register: dockerrun
 
@@ -36,9 +45,3 @@
     ignore_errors: yes
   
   - debug: msg="{{ dockerrunkill.stdout }}"
-
-  - name:  Starting captivity portal [http://192.168.10.1:8080/]
-    shell: cd /home/pi/src ; npm start &
-    register: dockerrun
-
-  - debug: msg="{{ dockerrun.stdout }}"
