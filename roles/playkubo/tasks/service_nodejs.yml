@@ -8,6 +8,15 @@
 
   - debug: msg="{{ supervisor.stdout }}"
 
+  - name:  Remove current appserver
+    ignore_errors: yes
+    become: true
+    become_method: sudo
+    shell: rm -rf /home/pi/playkubo.old
+    register: remove
+
+  - debug: msg="{{ remove.stdout }}"
+
   - name:  Move current appserver
     become: true
     become_method: sudo
@@ -22,7 +31,14 @@
 
   - debug: msg="{{ clonerepo.stdout }}"
 
-  - name:  Symbolic source app server
+  - name:  Remove symbolic source app server
+    ignore_errors: yes
+    shell: rm /home/pi/src
+    register: removesourcelink
+
+  - debug: msg="{{ removesourcelink.stdout }}"
+
+  - name:  Add symbolic source app server
     shell: ln -s /home/pi/playkubo/playkubo-portal-src /home/pi/src
     register: sourcelink
 
