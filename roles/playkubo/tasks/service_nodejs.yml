@@ -22,18 +22,23 @@
 
 - block:
   - name:  Rebooting captivity portal [http://192.168.10.1:8080/]
-    become: true
-    become_method: sudo
     shell: cd /home/pi/src/ ; npm install
     register: dockerrun
 
   - debug: msg="{{ dockerrun.stdout }}"
 
 - block:
-  - name:  Starting captivity portal [http://192.168.10.1:8080/]
+  - name:  Stop captivity portal if present
     become: true
     become_method: sudo
-    shell: node /home/pi/src/server.js &
+    shell: pgrep node | xargs kill -9
+    register: dockerrunkill
+    ignore_errors: yes
+  
+  - debug: msg="{{ dockerrunkill.stdout }}"
+
+  - name:  Starting captivity portal [http://192.168.10.1:8080/]
+    shell: cd /home/pi/src ; npm start &
     register: dockerrun
 
   - debug: msg="{{ dockerrun.stdout }}"

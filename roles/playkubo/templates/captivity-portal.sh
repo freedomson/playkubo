@@ -37,6 +37,11 @@ sudo iptables -t nat -A PREROUTING -i ap0 -p tcp -j DNAT --to-destination 192.16
         echo "Initialized"
         exit 0
         ;;
+    'initialize_single')
+        sudo iptables -t nat -A POSTROUTING -s 192.168.10.0/24 ! -d 192.168.10.0/24 -j MASQUERADE
+        echo "Initialize Single"
+        exit 0
+        ;;
     'add')
         # $2: IP address of client.
         CLIENT=$2

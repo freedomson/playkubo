@@ -1,0 +1,19 @@
+.pk-background {
+    background-color: #efefef;
+    line-height: 30px;
+    font-family: Helvetica, Arial, Sans-Serif;
+    color: #333;
+    margin: 0px;
+    padding: 1vw;
+    widht: 100%;
+    height: 100%;
+    background-image: url(/sponsor.jpeg);
+    background-blend-mode: exclusion;
+}
+
+.pk-content-box {
+    width: 50%;
+    background-color: #fff;
+    padding: 2vw;
+    opacity: 0.8;
+}

@@ -99,7 +99,7 @@ EOF
 # TODO: Supervisor
 sudo bash -c 'cat > /bin/start_wifi.sh' << EOF
 echo 'Starting Wifi AP and client...'
-sleep 5
+sleep 30
 sudo ifdown --force wlan0
 sudo ifdown --force ap0
 sudo ifup ap0
@@ -110,7 +110,7 @@ sudo /home/pi/captivity-portal.sh purge
 sudo /home/pi/captivity-portal.sh initialize
 
 echo 'Starting Captivity Portal...'
-node /home/pi/src/server.js &
+cd /home/pi/src ; npm start &
 
 EOF
 chmod +x /bin/start_wifi.sh

@@ -3,3 +3,20 @@
     dest: /home/pi/captivity-portal.sh
     owner: pi
     mode: 0775
+
+- block:
+    - name:  Purge iptables
+      become: true
+      become_method: sudo
+      shell: /home/pi/captivity-portal.sh purge
+      register: purgeiptables
+
+    - debug: msg="{{ purgeiptables.stdout }}"
+
+    - name:  Initialize net access iptables
+      become: true
+      become_method: sudo
+      shell: /home/pi/captivity-portal.sh initialize_single
+      register: initialize_single
+
+    - debug: msg="{{ initialize_single.stdout }}"

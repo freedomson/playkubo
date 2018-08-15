@@ -52,6 +52,9 @@ network={
  scan_ssid=1
  ssid="internet_provider_ssid_name"
  psk="internet_provider_secret"
+ # For passwordless wifi access points
+ #key_mgmt=NONE
+ #priority=-999
 }
 ```
 
