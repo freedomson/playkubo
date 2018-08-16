@@ -2,5 +2,5 @@
     register: start_wifi_out
     become: true
     become_method: sudo
-    shell: /bin/start_wifi.sh
+    shell: nohup /bin/start_wifi.sh &
   - debug: var=start_wifi_out.stdout_lines
